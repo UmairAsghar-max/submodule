@@ -30,7 +30,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Set-up Machine
-        run: MACHINE=raspberrypi source setup-environment raspberrypi
+        run: MACHINE=raspberrypi3 source setup-environment raspberrypi
 
       # Runs a set of commands using the runners shell
       - name: Start Build
