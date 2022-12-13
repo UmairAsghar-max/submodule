@@ -1,0 +1,15 @@
+[submodule "sources/poky"]
+	path = sources/poky
+	url = git://git.yoctoproject.org/poky
+[submodule "sources/meta-mender"]
+	path = sources/meta-mender
+	url = https://github.com/mendersoftware/meta-mender
+[submodule "sources/meta-mender-community"]
+	path = sources/meta-mender-community
+	url = https://github.com/mendersoftware/meta-mender-community
+[submodule "sources/meta-openembedded"]
+	path = sources/meta-openembedded
+	url = https://github.com/openembedded/meta-openembedded
+[submodule "sources/meta-raspberrypi"]
+	path = sources/meta-raspberrypi
+	url = https://github.com/agherzan/meta-raspberrypi
