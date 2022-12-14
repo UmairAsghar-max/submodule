@@ -33,9 +33,9 @@ jobs:
         run: sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm    
             
       # Runs a single command using the runners shell
-      - name: Source Environment for BitBake
-        run: |
-            source setup-environment raspberrypi    
+      #- name: Source Environment for BitBake
+      #  run: |
+      #      source setup-environment raspberrypi    
           
       - name: Cache
         uses: actions/cache@v3
@@ -53,7 +53,7 @@ jobs:
       - name: Install Cache Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-             #source setup-environment raspberrypi   
+             source setup-environment raspberrypi   
              bitbake core-image-minimal --runall=fetch 
 
       # Runs a single command using the runners shell
