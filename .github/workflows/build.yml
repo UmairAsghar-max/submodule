@@ -23,8 +23,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
+
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Preparing Environment
         run: sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm
 
@@ -33,6 +36,7 @@ jobs:
         run: |
              ls sources/meta-mender
              ls sources/poky
+             source setup-environment raspberrypi
 
       # Runs a set of commands using the runners shell
       - name: Start Build
