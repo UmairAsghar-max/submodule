@@ -32,12 +32,16 @@ jobs:
         run: sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm
 
       # Runs a single command using the runners shell
-      - name: Set-up Machine
+      - name: Set-up Machine and start build
         run: |
-             ls sources/meta-mender
-             ls sources/poky
              source setup-environment raspberrypi
+             MACHINE=raspberrypi3 bitbake core-image-minimal
+             du tmp/deploy
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: mender-artifacts
+          path: |
+           build/tmp/deploy/**/.mender
+           build/tmp/deploy/**/.sdcard
 
-      # Runs a set of commands using the runners shell
-      - name: Start Build
-        run: MACHINE=raspberrypi3 bitbake core-image-minimal
