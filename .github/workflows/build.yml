@@ -28,13 +28,36 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
+          
+            # Runs a single command using the runners shell
+      - name: Source Environment for BitBake
+        run: |
+             source setup-environment raspberrypi    
+          
+      - name: Cache
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+              ./build/sstate-cache
+              ./build/downloads
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}  
+          restore-keys: |
+              ${{ runner.os }}-build-${{ env.cache-name }}-
+              ${{ runner.os }}-build-
+              ${{ runner.os }}-
+              
+      - name: Install Cache Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+             bitbake core-image-minimal --runall=fetch 
+          
       - name: Preparing Environment
         run: sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat libsdl1.2-dev xterm
 
       # Runs a single command using the runners shell
       - name: Set-up Machine and start build
         run: |
-             source setup-environment raspberrypi
              echo MENDER_SERVER_URL = '"https://hosted.mender.io"' >> conf/local.conf
              echo MENDER_TENANT_TOKEN = '"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW5kZXIudGVuYW50IjoiNjM3NWM4YzQ3ZjBkZWFlZGIyNzlmYjgxIiwiaXNzIjoiTWVuZGVyIiwic3ViIjoiNjM3NWM4YzQ3ZjBkZWFlZGIyNzlmYjgxIn0.IGiJbceVTbgsLQMnkXWP0VLY-ThF3rdOP8Mw9v1x8L-oBLIhHlqNd1bmekY-ZM9BhWiJaJob3dqMqU2weqVgf-gl5BGo2FIzQGa7_vmQQv8-KFlaa90dExNxr-ISOUdRY09_-HbXH42UOLh8gVlpdqpKbFnr0FdwO3ZHycNWQD9-qncuhijpiWRe697-2VA9OvUsiax22ikzBDiLf9Zd9RkILv8Gz4SMgTlQ34u-xCu8v_-EYpOcIitijxdz7ywFVAfRwYilsGHH8z3zhY2HuSdvBj6spNkAqSeGX2eQVADsmbRGUL3ASwmFsw8QKgYRReC4T8dNmohGzHQ20MEr8955FvUMFRpFsB5BOUhIwMwlstdST5HiTrsEDIcTgttL9eczz6g1_jH35ZezTcAWIGKy8vOrI-GpemYPFUQqbt5fl2RiWpV-fq2FWYxk0AeVWum3NDN1hiYuwfQg5N-88TrZn3Q_G66osxISVfnIAIBg4AbkrHPzVgEXYfBvrLxT"' >> conf/local.conf
              bitbake-layers show-layers
