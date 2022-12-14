@@ -50,6 +50,7 @@ jobs:
       - name: Install Cache Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+             source setup-environment raspberrypi   
              bitbake core-image-minimal --runall=fetch 
           
       - name: Preparing Environment
